@@ -1,5 +1,4 @@
-﻿#define FORCE_EXCEPTION
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -28,9 +27,6 @@ namespace LibAstroneerBugReporter.ReportingSources
             {
                 using (Process process = new Process())
                 {
-#if FORCE_EXCEPTION
-                    throw new Exception("FORCED EXCEPTION!!");
-#endif
                     process.StartInfo.UseShellExecute = false;
                     process.StartInfo.RedirectStandardOutput = true;
                     process.StartInfo.RedirectStandardError = true;
