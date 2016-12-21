@@ -50,7 +50,7 @@ namespace LibAstroneerBugReporter
             using(var writer = new FileStream(_reportOutputPath, FileMode.CreateNew))
             {
                 archive = new ZipArchive(writer, ZipArchiveMode.Create, false);
-                foreach (FileInfo report in _reportsAsFiles)
+                foreach (FileInfo report in _reportsAsFiles.Where(r => r != null))
                 {
                     archive.CreateEntryFromFile(report.FullName, report.Name, CompressionLevel.Optimal);
                 }
