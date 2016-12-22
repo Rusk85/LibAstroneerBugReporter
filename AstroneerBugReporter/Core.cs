@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using LibAstroneerBugReporter;
 using LibAstroneerBugReporter.ReportingSources;
 using System.IO;
+using LibUIAstroneerBugReporter.CLI;
+using LibUIAstroneerBugReporter;
+using CommandLine;
 
 namespace AstroneerBugReporter
 {
@@ -13,7 +16,8 @@ namespace AstroneerBugReporter
     {
         public static void Main(string[] args)
         {
-            generateBugReport(args);
+            //generateBugReport(args);
+            runWithCmdLineInterface(args);
         }
 
         private static void generateBugReport(string[] args)
@@ -25,5 +29,16 @@ namespace AstroneerBugReporter
             reporter.Run(uploadToGoogleDrive);
             Environment.Exit(0);
         }
+
+        private static void runWithCmdLineInterface(string[] args)
+        {
+            UIDelegator ui = new UIDelegator(new AstroneerCli());
+            var parserResult = (ParserResult<AstroneerCliOptions>)ui.ShowUI(args);
+            AstroneerCliOptions cliOptions = null;
+            var uploadOptions = parserResult.WithParsed<AstroneerCliOptions>(a => cliOptions = a);
+            BugReporter reporter = new BugReporter(new ReportingSourceCollector());
+            reporter.Run(cliOptions.UploadToGoogleDrive, cliOptions.ShortenDownloadLinkUrl);
+        }
+
     }
 }

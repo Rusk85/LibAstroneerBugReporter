@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibAstroneerBugReporter", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroneerBugReporter", "..\AstroneerBugReporter\AstroneerBugReporter.csproj", "{0F1C6A75-3ECA-43BF-89AC-34801EB862B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibUIAstroneerBugReporter", "..\LibUIAstroneerBugReporter\LibUIAstroneerBugReporter.csproj", "{30CB2AB1-E3CF-4EDA-9580-F3E59F83C096}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{0F1C6A75-3ECA-43BF-89AC-34801EB862B1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0F1C6A75-3ECA-43BF-89AC-34801EB862B1}.Release|x64.ActiveCfg = Release|x64
 		{0F1C6A75-3ECA-43BF-89AC-34801EB862B1}.Release|x64.Build.0 = Release|x64
+		{30CB2AB1-E3CF-4EDA-9580-F3E59F83C096}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30CB2AB1-E3CF-4EDA-9580-F3E59F83C096}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30CB2AB1-E3CF-4EDA-9580-F3E59F83C096}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{30CB2AB1-E3CF-4EDA-9580-F3E59F83C096}.Debug|x64.Build.0 = Debug|Any CPU
+		{30CB2AB1-E3CF-4EDA-9580-F3E59F83C096}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30CB2AB1-E3CF-4EDA-9580-F3E59F83C096}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30CB2AB1-E3CF-4EDA-9580-F3E59F83C096}.Release|x64.ActiveCfg = Release|Any CPU
+		{30CB2AB1-E3CF-4EDA-9580-F3E59F83C096}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

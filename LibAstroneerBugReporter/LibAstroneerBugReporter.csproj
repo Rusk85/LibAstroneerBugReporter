@@ -120,9 +120,9 @@
     <Compile Include="ReportingSources\AstroneerSaveGameReportingSource.cs" />
     <Compile Include="ReportingSources\DxDiagReportingSource.cs" />
     <Compile Include="StorageSolutions\GoogleDriveStorageSolution.cs" />
-    <Compile Include="StorageSolutions\IStorageSolution.cs" />
+    <Compile Include="StorageSolutions\Interfaces\IStorageSolution.cs" />
     <Compile Include="UrlShortener\GoogleUrlShortener.cs" />
-    <Compile Include="UrlShortener\IUrlShortener.cs" />
+    <Compile Include="UrlShortener\Interfaces\IUrlShortener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
