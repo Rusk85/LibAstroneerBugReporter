@@ -23,6 +23,7 @@ namespace AstroneerBugReporter
                     || args[0].ToLower() == "/upload");
             BugReporter reporter = new BugReporter(new ReportingSourceCollector());
             reporter.Run(uploadToGoogleDrive);
+            Environment.Exit(0);
         }
     }
 }

@@ -72,6 +72,10 @@
       <HintPath>packages\Google.Apis.1.20.0\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Google.Apis.Urlshortener.v1, Version=1.20.0.138, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>packages\Google.Apis.Urlshortener.v1.1.20.0.138\lib\net45\Google.Apis.Urlshortener.v1.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -105,6 +109,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="GoogleOAuthHelper.cs" />
     <Compile Include="ReportingSources\BugReporter.cs" />
     <Compile Include="ReportingSources\Interfaces\IReportingSourcesCollector.cs" />
     <Compile Include="ReportingSources\ReportingSourceCollector.cs" />
@@ -116,6 +121,8 @@
     <Compile Include="ReportingSources\DxDiagReportingSource.cs" />
     <Compile Include="StorageSolutions\GoogleDriveStorageSolution.cs" />
     <Compile Include="StorageSolutions\IStorageSolution.cs" />
+    <Compile Include="UrlShortener\GoogleUrlShortener.cs" />
+    <Compile Include="UrlShortener\IUrlShortener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

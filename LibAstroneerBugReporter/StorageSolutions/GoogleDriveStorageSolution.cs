@@ -4,92 +4,68 @@ using Google.Apis.Drive.v3.Data;
 using Google.Apis.Requests;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using LibAstroneerBugReporter.GoogleApiHelper;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using static Google.Apis.Drive.v3.FilesResource;
 
 namespace LibAstroneerBugReporter
 {
-    public class GoogleDriveStorageSolution : IStorageSolution
+    public class GoogleDriveStorageSolution : IStorageSolution, IGoogleServiceAuthenticator
     {
-        private OAuthAccessToken _accessToken;
-        private const string _DriveApiEndpoint = @"https://www.googleapis.com/upload/drive/v3/files";
-        private string[] _scope = new string[] { @"https://www.googleapis.com/auth/drive.file" };
+        private const string _contentType = @"application/x-compressed";
 
-        private string _credentialsStorage = Path.Combine(Environment.GetFolderPath(
-                    System.Environment.SpecialFolder.Personal), ".credentials", "drive-astroneer-bug-reports.json");
-
-        private string _contentType = @"application/x-compressed";
-        private UserCredential _token = null;
-
-        public GoogleDriveStorageSolution()
-        {
-            _accessToken = JsonConvert.DeserializeObject<OAuthAccessToken>(AccessToken.JsonString);
-        }
+        private GoogleOAuthHelper _googleOAuthHelper = null;
 
         public string Store(object resourceHandle)
         {
             if(resourceHandle.GetType() == typeof(FileInfo))
             {
+                Authenticate(GoogleService.Drive);
                 return uploadZipArchive(resourceHandle as FileInfo);
             }
             return null;
         }
 
+        public GoogleApiServiceConfiguration Authenticate(GoogleService service)
+        {
+            _googleOAuthHelper = _googleOAuthHelper ?? new GoogleOAuthHelper(service);
+            _googleOAuthHelper.Authorize();
+            return _googleOAuthHelper.GoogleApiServiceConfiguration;
+        }
+
+
         private string uploadZipArchive(FileInfo zipArchive)
         {
-            using (var memStream = new MemoryStream(Encoding.ASCII.GetBytes(AccessToken.JsonString)))
+            var file = new Google.Apis.Drive.v3.Data.File
             {
-                var secrets = GoogleClientSecrets.Load(memStream).Secrets;
+                Name = zipArchive.Name,
+            };
 
-                _token = _token ?? GoogleWebAuthorizationBroker.AuthorizeAsync(secrets,
-                    _scope,
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(_credentialsStorage, true)).Result;
-
-                var service = new DriveService(new BaseClientService.Initializer()
+            using (var fStream = new FileStream(zipArchive.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                var uploadRequest = new CreateMediaUpload(_googleOAuthHelper.GoogleApiServiceConfiguration.ClientService, file, fStream, _contentType);
+                var response = uploadRequest.Upload();
+                if (response.Status == Google.Apis.Upload.UploadStatus.Completed)
                 {
-                    HttpClientInitializer = _token,
-                    ApplicationName = _accessToken.installed.project_id
-                });
-
-                var file = new Google.Apis.Drive.v3.Data.File
+                    return getDownloadLink(uploadRequest.ResponseBody);
+                }
+                else
                 {
-                    Name = zipArchive.Name,
-                };
-
-                using (var fStream = new FileStream(zipArchive.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    var uploadRequest = new CreateMediaUpload(service, file, fStream, _contentType);
-                    var response = uploadRequest.Upload();
-                    if (response.Status == Google.Apis.Upload.UploadStatus.Completed)
-                    {
-                        return getDownloadLink(uploadRequest.ResponseBody);
-                    }
-                    else
-                    {
-                        return response.Exception.Message;
-                    }
+                    return response.Exception.Message;
                 }
             }
         }
 
         private string getDownloadLink(Google.Apis.Drive.v3.Data.File file)
         {
-            var service = new DriveService(new BaseClientService.Initializer
-            {
-                HttpClientInitializer = _token,
-                ApplicationName = _accessToken.installed.project_id
-            });
 
+            DriveService service = (DriveService)_googleOAuthHelper.GoogleApiServiceConfiguration.ClientService;
 
             var batch = new BatchRequest(service);
             string returnValue = null;
@@ -107,7 +83,6 @@ namespace LibAstroneerBugReporter
                     returnValue = error.Message;
                     return;
                 }
-                Console.WriteLine(permission.Id);
                 returnPermission = permission;
                 if (!String.IsNullOrEmpty(file.WebContentLink))
                 {
@@ -139,21 +114,8 @@ namespace LibAstroneerBugReporter
             catch (Exception) { }
             return returnValue;
         }
+        
     }
 
-    public class Installed
-    {
-        public string client_id { get; set; }
-        public string project_id { get; set; }
-        public string auth_uri { get; set; }
-        public string token_uri { get; set; }
-        public string auth_provider_x509_cert_url { get; set; }
-        public string client_secret { get; set; }
-        public List<string> redirect_uris { get; set; }
-    }
-
-    public class OAuthAccessToken
-    {
-        public Installed installed { get; set; }
-    }
+    
 }
