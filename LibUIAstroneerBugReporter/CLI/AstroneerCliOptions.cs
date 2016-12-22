@@ -20,6 +20,9 @@ namespace LibUIAstroneerBugReporter.CLI
         [Option('s', "shorten", SetName ="Upload", HelpText = "Shorten download url.")]
         public bool ShortenDownloadLinkUrl { get; set; }
 
+        [Option('c', "copy", SetName = "Upload", HelpText = "Copies either url result to your clipboard.")]
+        public bool CopyLinkToClipboard { get; set; }
+
         //[('h', "help")]
         //public string ShowUsage()
         //{

@@ -14,6 +14,7 @@ namespace AstroneerBugReporter
 {
     class Core
     {
+        [STAThread]
         public static void Main(string[] args)
         {
             //generateBugReport(args);
@@ -37,7 +38,7 @@ namespace AstroneerBugReporter
             AstroneerCliOptions cliOptions = null;
             var uploadOptions = parserResult.WithParsed<AstroneerCliOptions>(a => cliOptions = a);
             BugReporter reporter = new BugReporter(new ReportingSourceCollector());
-            reporter.Run(cliOptions.UploadToGoogleDrive, cliOptions.ShortenDownloadLinkUrl);
+            reporter.Run(cliOptions.UploadToGoogleDrive, cliOptions.ShortenDownloadLinkUrl, cliOptions.CopyLinkToClipboard);
         }
 
     }
